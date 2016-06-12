@@ -1,0 +1,4 @@
+nohup.out
+mud.log
+*.class
+resources/fakedb/*
