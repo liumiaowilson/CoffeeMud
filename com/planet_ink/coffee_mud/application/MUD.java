@@ -1547,8 +1547,9 @@ public class MUD extends Thread implements MudHost
 			CMProps.setBoolAllVar(CMProps.Bool.MUDSTARTED,true);
 			CMProps.setUpLowVar(CMProps.Str.MUDSTATUS,"OK");
 			
-			Enumeration<Command> commands = CMClass.instance().commands();
 			List<String> wordList = new ArrayList<String>();
+			
+			Enumeration<Command> commands = CMClass.instance().commands();
 			while(commands.hasMoreElements()) {
 			    Command command = commands.nextElement();
 			    if(command.getAccessWords() != null) {
@@ -1561,6 +1562,21 @@ public class MUD extends Thread implements MudHost
 	                }
 			    }
 			}
+			
+			Enumeration<Ability> abilities = CMClass.instance().abilities();
+			while(abilities.hasMoreElements()) {
+			    Ability ability = abilities.nextElement();
+			    if(ability.triggerStrings() != null) {
+			        for(String triggerString : ability.triggerStrings()) {
+			            if(!triggerString.isEmpty()) {
+			                if(Character.isLetter(triggerString.charAt(0))) {
+			                    wordList.add(triggerString.toLowerCase());
+			                }
+			            }
+			        }
+			    }
+			}
+			
 			Collections.sort(wordList);
 			String accessWordsOutput = CMProps.getVar(CMProps.Str.ACCESS_WORDS_OUTPUT);
 			accessWordsOutput = accessWordsOutput.toLowerCase();
