@@ -1546,6 +1546,32 @@ public class MUD extends Thread implements MudHost
 			CMProps.setVar(CMProps.Str.MUDPORTS,str.toString());
 			CMProps.setBoolAllVar(CMProps.Bool.MUDSTARTED,true);
 			CMProps.setUpLowVar(CMProps.Str.MUDSTATUS,"OK");
+			
+			Enumeration<Command> commands = CMClass.instance().commands();
+			List<String> wordList = new ArrayList<String>();
+			while(commands.hasMoreElements()) {
+			    Command command = commands.nextElement();
+			    if(command.getAccessWords() != null) {
+			        for(String accessWord : command.getAccessWords()) {
+			            if(!accessWord.isEmpty()) {
+			                if(Character.isLetter(accessWord.charAt(0))) {
+			                    wordList.add(accessWord.toLowerCase());
+			                }
+			            }
+	                }
+			    }
+			}
+			Collections.sort(wordList);
+			String accessWordsOutput = CMProps.getVar(CMProps.Str.ACCESS_WORDS_OUTPUT);
+			accessWordsOutput = accessWordsOutput.toLowerCase();
+			CMFile file = new CMFile(accessWordsOutput, null);
+			StringBuffer sb = new StringBuffer();
+			for(String word : wordList) {
+			    sb.append(word + "\n");
+			}
+			file.saveText(sb);
+			Log.sysOut(Thread.currentThread().getName(),"Output access words.");
+			
 			Log.sysOut(Thread.currentThread().getName(),"Host#"+threadCode+" initializated.");
 			return true;
 		}

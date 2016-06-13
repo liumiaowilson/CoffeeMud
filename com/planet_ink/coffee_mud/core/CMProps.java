@@ -192,7 +192,8 @@ public class CMProps extends Properties
 		BLACKLISTFILE,
 		REMORTMASK,
 		REMORTRETAIN,
-		RACEMIXING
+		RACEMIXING,
+		ACCESS_WORDS_OUTPUT
 	}
 
 	/**
@@ -1984,6 +1985,7 @@ public class CMProps extends Properties
 		setVar(Str.INVRESETRATE,getStr("INVRESETRATE"));
 		setVar(Str.AUCTIONRATES,getStr("AUCTIONRATES","0,10,0.1%,10%,5%,1,168"));
 		setUpLowVar(Str.DEFAULTPROMPT,getStr("DEFAULTPROMPT"));
+		setVar(Str.ACCESS_WORDS_OUTPUT, getStr("ACCESS_WORDS_OUTPUT", "access_words.txt"));
 		String promptBehavior = getStr("PROMPTBEHAVIOR","NORMAL");
 		promptSuffix = new byte[0];
 		if(!promptBehavior.equalsIgnoreCase("NORMAL") && promptBehavior.length()>0)
