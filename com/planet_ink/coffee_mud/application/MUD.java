@@ -1586,6 +1586,13 @@ public class MUD extends Thread implements MudHost
 			    }
 			}
 			
+			List<String> socialList = CMLib.socials().getSocialsList();
+			for(String social : socialList) {
+			    if(!wordList.contains(social)) {
+			        wordList.add(social.toLowerCase());
+			    }
+			}
+			
 			Collections.sort(wordList);
 			String accessWordsOutput = CMProps.getVar(CMProps.Str.ACCESS_WORDS_OUTPUT);
 			accessWordsOutput = accessWordsOutput.toLowerCase();
