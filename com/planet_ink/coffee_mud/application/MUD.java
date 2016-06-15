@@ -1549,14 +1549,23 @@ public class MUD extends Thread implements MudHost
 			
 			List<String> wordList = new ArrayList<String>();
 			
+			Map<String, Command> commandsMap = new HashMap<String, Command>();
 			Enumeration<Command> commands = CMClass.instance().commands();
 			while(commands.hasMoreElements()) {
 			    Command command = commands.nextElement();
 			    if(command.getAccessWords() != null) {
 			        for(String accessWord : command.getAccessWords()) {
 			            if(!accessWord.isEmpty()) {
-			                if(Character.isLetter(accessWord.charAt(0))) {
+			                if(Character.isLetterOrDigit(accessWord.charAt(0))) {
 			                    wordList.add(accessWord.toLowerCase());
+			                    
+			                    if(!commandsMap.containsKey(accessWord)) {
+			                        commandsMap.put(accessWord, command);
+			                    }
+			                    else {
+			                        Command oldCommand = commandsMap.get(accessWord);
+			                        Log.sysOut("Command conflict found between [" + oldCommand.ID() + "] and [" + command.ID() + "] at [" + accessWord + "]");
+			                    }
 			                }
 			            }
 	                }
@@ -1569,7 +1578,7 @@ public class MUD extends Thread implements MudHost
 			    if(ability.triggerStrings() != null) {
 			        for(String triggerString : ability.triggerStrings()) {
 			            if(!triggerString.isEmpty()) {
-			                if(Character.isLetter(triggerString.charAt(0))) {
+			                if(Character.isLetterOrDigit(triggerString.charAt(0))) {
 			                    wordList.add(triggerString.toLowerCase());
 			                }
 			            }

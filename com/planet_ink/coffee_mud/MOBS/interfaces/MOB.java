@@ -1132,6 +1132,20 @@ public interface MOB extends Rider, DBIdentifiable, PhysicalAgent, ItemPossessor
 	 * @return an enumerator
 	 */
 	public Enumeration<String> expertises();
+	
+	/**
+	 * Returns if the mob is in the state of super user(working as an admin)
+	 * 
+	 * @return
+	 */
+	public boolean isSuperUser();
+	
+	/**
+	 * Sets the mob to be in the state of super user
+	 * 
+	 * @param flag
+	 */
+	public void setSuperUser(boolean flag);
 
 	/**
 	 * Enum for the MOB Attributes, which will also return

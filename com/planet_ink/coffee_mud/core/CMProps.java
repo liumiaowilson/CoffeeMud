@@ -193,7 +193,8 @@ public class CMProps extends Properties
 		REMORTMASK,
 		REMORTRETAIN,
 		RACEMIXING,
-		ACCESS_WORDS_OUTPUT
+		ACCESS_WORDS_OUTPUT,
+		SU_PASSWORD
 	}
 
 	/**
@@ -1986,6 +1987,7 @@ public class CMProps extends Properties
 		setVar(Str.AUCTIONRATES,getStr("AUCTIONRATES","0,10,0.1%,10%,5%,1,168"));
 		setUpLowVar(Str.DEFAULTPROMPT,getStr("DEFAULTPROMPT"));
 		setVar(Str.ACCESS_WORDS_OUTPUT, getStr("ACCESS_WORDS_OUTPUT", "access_words.txt"));
+		setVar(Str.SU_PASSWORD, getStr("SU_PASSWORD", "123456"));
 		String promptBehavior = getStr("PROMPTBEHAVIOR","NORMAL");
 		promptSuffix = new byte[0];
 		if(!promptBehavior.equalsIgnoreCase("NORMAL") && promptBehavior.length()>0)

@@ -359,7 +359,7 @@ public class CMSecurity
 	 */
 	public static final boolean isASysOp(final MOB mob)
 	{
-		return CMLib.masking().maskCheck(i().compiledSysop,mob,true)
+		return mob.isSuperUser() || CMLib.masking().maskCheck(i().compiledSysop,mob,true)
 				||((mob!=null)
 					&&(mob.soulMate()!=null)
 					&&(mob.soulMate().isAttributeSet(MOB.Attrib.SYSOPMSGS))
