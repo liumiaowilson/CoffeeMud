@@ -75,13 +75,13 @@ public class DB_Query extends StdCommand {
                 String [] items = new String [col_num];
                 for(int i = 0; i < col_num; i++) {
                     if(Types.INTEGER == col_types[i]) {
-                        items[i] = String.valueOf(rs.getInt(i));
+                        items[i] = String.valueOf(rs.getInt(i + 1));
                     }
                     else if(Types.BIGINT == col_types[i]) {
-                        items[i] = String.valueOf(rs.getLong(i));
+                        items[i] = String.valueOf(rs.getLong(i + 1));
                     }
                     else if(Types.VARCHAR == col_types[i]) {
-                        items[i] = String.valueOf(rs.getString(i));
+                        items[i] = String.valueOf(rs.getString(i + 1));
                     }
                     else {
                         items[i] = "Unknown";
