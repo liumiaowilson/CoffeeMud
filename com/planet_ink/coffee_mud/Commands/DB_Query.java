@@ -95,6 +95,9 @@ public class DB_Query extends StdCommand {
             rs.close();
             
             int [] actual_col_widths = getColWidths(rows);
+            if(actual_col_widths == null) {
+                actual_col_widths = new int [col_widths.length];
+            }
             for(int i = 0; i < actual_col_widths.length; i++) {
                 actual_col_widths[i] = Math.max(actual_col_widths[i], col_names[i].length());
                 actual_col_widths[i] = Math.min(actual_col_widths[i], col_widths[i]) + 2;

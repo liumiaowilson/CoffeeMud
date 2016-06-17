@@ -36,7 +36,7 @@ public class Connection implements java.sql.Connection
 		System.err.println("Connection: " + x);
 	}
 
-	Backend getBackend()
+	public Backend getBackend()
 	{
 		return backend;
 	}

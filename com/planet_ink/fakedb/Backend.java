@@ -65,6 +65,10 @@ public class Backend
 			size = s;
 		}
 	}
+	
+	public List<String> getTableNames() {
+	    return new ArrayList<String>(fakeTables.keySet());
+	}
 
 	/**
 	*

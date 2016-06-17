@@ -125,6 +125,10 @@ public class DBConnection
 		sqlserver=false;
 		inUse=false;
 	}
+	
+	public Connection getRealConnection() {
+	    return this.myConnection;
+	}
 
 	public String catalog()
 	{
