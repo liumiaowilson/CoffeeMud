@@ -82,9 +82,12 @@ public class DB_ShowTable extends StdCommand {
                 msg.append(CMStrings.padRight(String.valueOf(col_widths[i]), width_width));
                 mob.tell(msg.toString());
             }
+            
+            rs.close();
         }
         catch(Exception e) {
             Log.errOut(e);
+            mob.tell(e.getMessage());
         }
         finally {
             connector.DBDone(con);
