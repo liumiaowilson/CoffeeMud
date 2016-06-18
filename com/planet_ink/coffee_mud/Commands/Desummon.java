@@ -12,7 +12,7 @@ public class Desummon extends StdCommand {
     public Desummon() {
     }
 
-    private final String[] access = I(new String[] { "DESUMMON" });
+    private final String[] access = I(new String[] { "DESUMMON", "UNSUMMON" });
 
     @Override
     public String[] getAccessWords() {

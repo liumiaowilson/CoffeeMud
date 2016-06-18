@@ -2,6 +2,8 @@ package com.planet_ink.coffee_mud.Commands;
 
 import java.util.List;
 
+import com.planet_ink.coffee_mud.Behaviors.Mobile;
+import com.planet_ink.coffee_mud.Behaviors.MudChat;
 import com.planet_ink.coffee_mud.Common.interfaces.CMMsg;
 import com.planet_ink.coffee_mud.Common.interfaces.Session;
 import com.planet_ink.coffee_mud.Locales.interfaces.Room;
@@ -22,6 +24,46 @@ public class Summon extends StdCommand {
     public String[] getAccessWords() {
         return access;
     }
+    
+    public static boolean bringToLife(MOB mob, MOB new_mob, Room startRoom) {
+        if(new_mob != null) {
+            if(new_mob.session() != null) {
+                mob.tell("Sorry, cannot summon a MOB which has been occupied by a session.");
+                return false;
+            }
+            Session new_session = (Session)CMClass.getCommon("NPCPlayerFakeSession");
+            new_session.initializeSession(null, Thread.currentThread().getThreadGroup().getName(), "MEMORY");
+            new_session.setMob(new_mob);
+            new_mob.setSession(new_session);
+            if(startRoom == null) {
+                startRoom = CMLib.map().getRoom(mob.location());
+            }
+            new_mob.bringToLife(startRoom, false);
+            new_mob.location().showOthers(new_mob,startRoom,CMMsg.MASK_ALWAYS|CMMsg.MSG_ENTER, CMLib.lang().fullSessionTranslation("<S-NAME> appears!"));
+            
+            for(int f=0;f<new_mob.numFollowers();f++)
+            {
+                final MOB follower=new_mob.fetchFollower(f);
+                if(follower==null)
+                    continue;
+                follower.setLocation(startRoom);
+                follower.setFollowing(new_mob); // before for bestow names sake
+                follower.bringToLife(startRoom,false);
+                follower.setFollowing(new_mob);
+                startRoom.showOthers(follower,startRoom,CMMsg.MASK_ALWAYS|CMMsg.MSG_ENTER, CMLib.lang().fullSessionTranslation("<S-NAME> appears!"));
+            }
+            
+            setGlobalBitmaps(new_mob);
+            
+            new_mob.addBehavior(new Mobile());
+            new_mob.addBehavior(new MudChat());
+            
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
     @Override
     public boolean execute(MOB mob, List<String> commands, int metaFlags) throws java.io.IOException {
@@ -34,31 +76,7 @@ public class Summon extends StdCommand {
         //check similar logic in CharCreation.completeCharacterLogin
         MOB new_mob = CMLib.players().getLoadPlayer(name);
         if(new_mob != null) {
-            if(new_mob.session() != null) {
-                mob.tell("Sorry, cannot summon a MOB which has been occupied by a session.");
-                return false;
-            }
-            Session new_session = (Session)CMClass.getCommon("FakeSession");
-            new_session.initializeSession(null, Thread.currentThread().getThreadGroup().getName(), "MEMORY");
-            new_session.setMob(new_mob);
-            new_mob.setSession(new_session);
-            Room startRoom = CMLib.map().getRoom(mob.location());
-            new_mob.bringToLife(startRoom, false);
-            new_mob.location().showOthers(new_mob,startRoom,CMMsg.MASK_ALWAYS|CMMsg.MSG_ENTER,L("<S-NAME> appears!"));
-            
-            for(int f=0;f<new_mob.numFollowers();f++)
-            {
-                final MOB follower=new_mob.fetchFollower(f);
-                if(follower==null)
-                    continue;
-                follower.setLocation(startRoom);
-                follower.setFollowing(new_mob); // before for bestow names sake
-                follower.bringToLife(startRoom,false);
-                follower.setFollowing(new_mob);
-                startRoom.showOthers(follower,startRoom,CMMsg.MASK_ALWAYS|CMMsg.MSG_ENTER,L("<S-NAME> appears!"));
-            }
-            
-            setGlobalBitmaps(new_mob);
+            bringToLife(mob, new_mob, null);
         }
         else {
             mob.tell("Sorry, cannot find a MOB named " + name + ".");
@@ -67,7 +85,7 @@ public class Summon extends StdCommand {
         return false;
     }
     
-    private void setGlobalBitmaps(MOB mob)
+    private static void setGlobalBitmaps(MOB mob)
     {
         if(mob==null)
             return;
