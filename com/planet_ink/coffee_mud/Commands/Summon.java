@@ -5,6 +5,7 @@ import java.util.List;
 import com.planet_ink.coffee_mud.Behaviors.AlignHelper;
 import com.planet_ink.coffee_mud.Behaviors.Mobile;
 import com.planet_ink.coffee_mud.Behaviors.MudChat;
+import com.planet_ink.coffee_mud.Behaviors.Vagrant;
 import com.planet_ink.coffee_mud.Common.interfaces.CMMsg;
 import com.planet_ink.coffee_mud.Common.interfaces.Session;
 import com.planet_ink.coffee_mud.Locales.interfaces.Room;
@@ -67,6 +68,10 @@ public class Summon extends StdCommand {
             //help aligns
             AlignHelper alignhelper_behavior = new AlignHelper();
             new_mob.addBehavior(alignhelper_behavior);
+            
+            //set nomadic
+            Vagrant vagrant_behavior = new Vagrant();
+            new_mob.addBehavior(vagrant_behavior);
             
             return true;
         }
