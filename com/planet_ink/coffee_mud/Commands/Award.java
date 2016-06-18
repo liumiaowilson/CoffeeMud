@@ -17,6 +17,8 @@ import com.planet_ink.coffee_mud.core.Log;
 public class Award extends StdCommand {
     public static final String DEFAULT_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     
+    public static final int LIMIT = 10;
+    
     public Award() {
     }
 
@@ -191,7 +193,12 @@ public class Award extends StdCommand {
         
         SimpleDateFormat format = new SimpleDateFormat(DEFAULT_TIME_FORMAT);
         
-        for(int i = 0; i < history.items.size(); i++) {
+        int start = history.items.size() - LIMIT;
+        if(start < 0) {
+            start = 0;
+        }
+        
+        for(int i = start; i < history.items.size(); i++) {
             AwardHistoryItem item = history.items.get(i);
             String num = String.valueOf(i + 1);
             String time = format.format(new Date(item.getTime()));
