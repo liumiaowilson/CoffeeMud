@@ -42,9 +42,9 @@ public class AwardSystem {
         return histories;
     }
     
-    public boolean grantAward(Award award, String content) {
-        if(award == null || content == null || "".equals(content.trim())) {
-            return false;
+    public AwardHistory findHistoryFor(Award award) {
+        if(award == null) {
+            return null;
         }
         
         AwardHistory [] histories = this.getAllAwardHistories();
@@ -55,6 +55,17 @@ public class AwardSystem {
                 break;
             }
         }
+        
+        return history;
+    }
+    
+    public boolean grantAward(Award award, String content) {
+        if(award == null || content == null || "".equals(content.trim())) {
+            return false;
+        }
+        
+        AwardHistory history = this.findHistoryFor(award);
+        
         if(history == null) {
             return false;
         }
