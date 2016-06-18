@@ -643,7 +643,7 @@ public class MUDTracker extends StdLibrary implements TrackingLibrary
 				if((!wander)&&(!oldRoom.getArea().Name().equals(nextRoom.getArea().Name())))
 					direction=-1;
 				else
-				if((roomobject)&&(rooms!=null)&&(rooms.contains(nextRoom)))
+				if((roomobject)&&(rooms!=null)&&(!rooms.contains(nextRoom)))
 					direction=-1;
 				else
 				if((roomprefer)&&(rooms!=null)&&(!rooms.contains(nextRoom)))

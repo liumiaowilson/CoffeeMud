@@ -2,6 +2,7 @@ package com.planet_ink.coffee_mud.Commands;
 
 import java.util.List;
 
+import com.planet_ink.coffee_mud.Behaviors.AlignHelper;
 import com.planet_ink.coffee_mud.Behaviors.Mobile;
 import com.planet_ink.coffee_mud.Behaviors.MudChat;
 import com.planet_ink.coffee_mud.Common.interfaces.CMMsg;
@@ -55,8 +56,17 @@ public class Summon extends StdCommand {
             
             setGlobalBitmaps(new_mob);
             
-            new_mob.addBehavior(new Mobile());
+            //allow to chat
             new_mob.addBehavior(new MudChat());
+            
+            //allow to move
+            Mobile mobile_behavior = new Mobile();
+            mobile_behavior.setParms("min=10 max=60 chance=100 wander opendoors");
+            new_mob.addBehavior(mobile_behavior);
+            
+            //help aligns
+            AlignHelper alignhelper_behavior = new AlignHelper();
+            new_mob.addBehavior(alignhelper_behavior);
             
             return true;
         }
