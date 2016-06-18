@@ -12,4 +12,9 @@ public class NPCPlayerFakeSession extends FakeSession {
         return false;
     }
 
+    @Override
+    public long getInputLoopTime() {
+        return System.currentTimeMillis();
+    }
+
 }
