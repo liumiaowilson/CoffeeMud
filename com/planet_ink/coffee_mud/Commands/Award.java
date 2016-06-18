@@ -4,8 +4,11 @@ import java.util.List;
 
 import com.planet_ink.coffee_mud.MOBS.interfaces.MOB;
 import com.planet_ink.coffee_mud.awards.AwardSystem;
+import com.planet_ink.coffee_mud.core.CMLib;
+import com.planet_ink.coffee_mud.core.CMParms;
 import com.planet_ink.coffee_mud.core.CMSecurity;
 import com.planet_ink.coffee_mud.core.CMStrings;
+import com.planet_ink.coffee_mud.core.Log;
 
 public class Award extends StdCommand {
     public Award() {
@@ -66,6 +69,63 @@ public class Award extends StdCommand {
         
         return false;
     }
+    
+    private boolean grantAward(MOB mob, String selectStr) {
+        AwardSystem.Award award = null;
+        
+        AwardSystem.Award [] awards = AwardSystem.getInstance().getAllAwards();
+        try {
+            int id = Integer.parseInt(selectStr);
+            if(id < 1 || id > awards.length) {
+                mob.tell("No." + id + " is out of range.");
+                return false;
+            }
+            else {
+                award = awards[id - 1];
+            }
+        }
+        catch(Exception e) {
+            for(AwardSystem.Award a : awards) {
+                if(a.getName().contains(selectStr)) {
+                    award = a;
+                    break;
+                }
+            }
+        }
+        
+        if(award == null) {
+            mob.tell("No award is matched.");
+            return false;
+        }
+        
+        try {
+            String content = mob.session().prompt("Enter: ");
+            if(content == null || "".equals(content.trim())) {
+                mob.tell("Content should be provided.");
+                return false;
+            }
+            
+            boolean result = AwardSystem.getInstance().grantAward(award, content);
+            if(result) {
+                mob.tell("Grant award [" + award.getName() + "] successfully.");
+                
+                int point = award.getPoint();
+                mob.setQuestPoint(mob.getQuestPoint() + point);
+                mob.tell("Gained " + point + " quest point(s). Now you have " + mob.getQuestPoint() + " quest point(s).");
+                
+                CMLib.players().savePlayers();
+            }
+            else {
+                mob.tell("Failed to grant award [" + award.getName() + "].");
+            }
+        }
+        catch(Exception e) {
+            Log.errOut(e);
+            mob.tell("Failed to handle prompts.");
+        }
+        
+        return false;
+    }
 
     @Override
     public boolean execute(MOB mob, List<String> commands, int metaFlags) throws java.io.IOException {
@@ -74,7 +134,14 @@ public class Award extends StdCommand {
             return showAllAwards(mob);
         }
         else {
-            //TODO
+            String subCommand = commands.get(1);
+            if("grant".equalsIgnoreCase(subCommand)) {
+                String selectStr = CMParms.combine(commands, 2);
+                return grantAward(mob, selectStr);
+            }
+            else {
+                mob.tell("Operation " + subCommand + " is not supported.");
+            }
         }
         
         return false;
